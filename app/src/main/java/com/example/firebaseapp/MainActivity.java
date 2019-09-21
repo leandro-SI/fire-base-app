@@ -1,11 +1,16 @@
 package com.example.firebaseapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     // referencia ao documento usuario
     private DatabaseReference usuarioReferencia = firebaseReferencia.child("usuarios");
-    private  DatabaseReference produtoReferencia = firebaseReferencia.child("produtos");
+    private  DatabaseReference produtoReferencia = firebaseReferencia.child("produtos").child("001");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +36,26 @@ public class MainActivity extends AppCompatActivity {
         // salvando dados via objeto
         //usuarioReferencia.child("003").setValue( usuario );
 
-
+        /*
         Produto produto = new Produto();
         produto.setDescricao("Moto g");
         produto.setCor("preto");
         produto.setFabricante("Motorola");
-
         produtoReferencia.child("001").setValue( produto );
+        */
+
+        //Recuperando Dados da coleção em tempo real
+        usuarioReferencia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("FIREBASE: ", dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         // gravando dados na coleção
         //usuarioReferencia.child("002").child("nome").setValue("Dayanne Santos");
